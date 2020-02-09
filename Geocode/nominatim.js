@@ -1,24 +1,37 @@
 const fetch = require("node-fetch");
 
-const BASE_URL = "https://nominatim.openstreetmap.org/search?";
+const BASE_URL = "https://nominatim.openstreetmap.org/";
 
 class Nominatim {
   constructor() {}
-  geocodeQuery(query, limit = "1") {
+  geocodeQuery(q, limit = "1") {
     const params = new URLSearchParams({
-      query,
+      q,
       limit,
       format: "json"
     });
-    return geocodeQuery(params);
+
+    const type = "search";
+    
+    return geocodeQuery(params, type);
   }
-  reverseGeocode(dataset, lng, lat) {
-    const query = lng + "," + lat;
-    return geocodeQuery(dataset, query);
+  reverseGeocode(lat, lng, zoom = 18 ) {
+
+    const params = new URLSearchParams({
+      lat,
+      lng,
+      zoom,
+      format: "json"
+    });
+
+    const type = "reverse";
+    
+    return geocodeQuery(params, type);
   }
 }
-const geocodeQuery = async params => {
-  const url = BASE_URL + params.toString();
+const geocodeQuery = async (params, type) => {
+  const url = BASE_URL + type + "?" + params.toString();
+  console.log(url);
   const payload = await fetch(url).then(res => res.json());
   if (!payload || !payload.length) {
     return { errors: [`No response for Address: ${params.get("query")}`] };
