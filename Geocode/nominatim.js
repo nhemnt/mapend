@@ -31,7 +31,6 @@ class Nominatim {
 }
 const geocodeQuery = async (params, type) => {
   const url = BASE_URL + type + "?" + params.toString();
-  console.log(url);
   const payload = await fetch(url).then(res => res.json());
   if (!payload || !payload.length) {
     return { errors: [`No response for Address: ${params.get("query")}`] };

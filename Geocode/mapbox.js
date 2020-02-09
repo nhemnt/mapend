@@ -11,7 +11,6 @@ class Mapbox {
     ACCESS_TOKEN = accessToken;
   }
   geocodeQuery(dataset, query) {
-    console.log("here");
     return geocodeQuery(dataset, query);
   }
   reverseGeocode(dataset, lng, lat) {
