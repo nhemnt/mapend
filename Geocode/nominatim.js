@@ -15,12 +15,12 @@ class Nominatim {
     
     return geocodeQuery(params, type);
   }
-  reverseGeocode(lat, lng, zoom = 18 ) {
+  reverseGeocode(lat, lon, zoom ) {
 
     const params = new URLSearchParams({
       lat,
-      lng,
-      zoom,
+      lon,
+      zoom: zoom ? zoom : 18,
       format: "json"
     });
 
@@ -31,9 +31,10 @@ class Nominatim {
 }
 const geocodeQuery = async (params, type) => {
   const url = BASE_URL + type + "?" + params.toString();
+  console.log(url);
   const payload = await fetch(url).then(res => res.json());
-  if (!payload || !payload.length) {
-    return { errors: [`No response for Address: ${params.get("query")}`] };
+  if (!payload) {
+    return { errors: [`No response for Address: ${params.get("q")}`] };
   }
 
   return payload;
