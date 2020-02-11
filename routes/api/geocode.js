@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const nominatim = require("../../Geocode/nominatim");
 const mapbox = new require("../../Geocode/mapbox");
-const arcgis = require("../../Geocode/arcgis")
+const arcgis = require("../../Geocode/arcgis");
 
 const validateGeocodeInput = require("../../validation/geocode");
 
@@ -17,26 +17,19 @@ router.post("/nominatim", function(req, res, next) {
     return res.status(400).json(errors);
   }
 
-  if (req.body.reverse) {
-    const { lat, lon, zoom } = req.body;
+  const { body } = req;
 
-    Nominatim.reverseGeocode( lat, lon, zoom)
-      .then(data => {
-        res.json(data);
-      })
-      .catch(err => {
-        console.log(err);
-        res.json(err);
-      });
-  } else {
-    Nominatim.geocodeQuery(req.body.address)
-      .then(data => {
-        res.json(data);
-      })
-      .catch(err => {
-        res.json(err);
-      });
-  }
+  const promise = body.reverse
+    ? Nominatim.reverseGeocode(body.lat, body.lon, body.zoom)
+    : Nominatim.geocodeQuery(body.address);
+
+  promise
+    .then(data => {
+      res.json(data);
+    })
+    .catch(err => {
+      res.json(err);
+    });
 });
 
 router.post("/mapbox", function(req, res, next) {
@@ -60,15 +53,21 @@ router.post("/arcgis", function(req, res, next) {
   if (!isValid) {
     return res.status(400).json(errors);
   }
-  Arcgis.geocodeQuery(req.body.address)
+  
+  const { body } = req;
+
+  const promise = body.reverse
+    ? Arcgis.reverseGeocode(body.lat, body.lon)
+    : Arcgis.geocodeQuery(body.address);
+
+  promise
     .then(data => {
-      console.log('************')
-      console.log(data)
       res.json(data);
     })
     .catch(err => {
       res.json(err);
     });
+
 });
 
 module.exports = router;

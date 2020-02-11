@@ -7,6 +7,7 @@ const myCache = new NodeCache();
 
 const AUTH_URL = keys.arcgis.authUrl;
 const BASE_URL = keys.arcgis.geocodeEndpoint;
+const REVERSE_URL = keys.arcgis.reverseGeocodeEndpoint;
 
 let CLIENT_ID = keys.arcgis.clientId;
 let CLIENT_SECRET = keys.arcgis.clientSecret;
@@ -16,9 +17,14 @@ class Arcgis {
   geocodeQuery(query) {
     return geocodeQuery(query);
   }
-  reverseGeocode(dataset, lng, lat) {
+  reverseGeocode(lat, lng) {
+    if (!validateLngLat(lat, lng)) {
+      {
+        errors: [`Enter valid latitude and longitude.`];
+      }
+    }
     const query = lng + "," + lat;
-    return geocodeQuery(dataset, query);
+    return geocodeQuery(query);
   }
 }
 
@@ -43,7 +49,17 @@ const getToken = async () => {
   return;
 };
 
-const geocodeQuery = async query => {
+const validateLngLat = (lat, lng) => {
+  if (!(isNaN(lat) || isNaN(lng))) {
+    const lat = Number(lat);
+    const lng = Number(lng);
+    if (lng > -180 && lng < 180 && lat > -90 && lat < 90) return true;
+  }
+  return;
+};
+
+const geocodeQuery = async (query, isReverse = false) => {
+  //TODO: Handle with promise
   // const value = myCache.get("arcgis");
   // if (!value) {
   //   await getToken();
@@ -53,11 +69,16 @@ const geocodeQuery = async query => {
   const params = new URLSearchParams({
     // token:value.access_token,
     f: "json",
-    singleLine: query,
-    outFields: "AddNum,StPreDir,StName,StType,City,Postal,Region,Country"
+    ...(isReverse
+      ? { location: query }
+      : {
+          singleLine: query,
+          outFields: "AddNum,StPreDir,StName,StType,City,Postal,Region,Country"
+        })
   });
- 
-  const url = BASE_URL + "?" + params.toString();
+
+  const url = `${isReverse ? REVERSE_URL : BASE_URL}?${params.toString()}`;
+
   const payload = await fetch(url).then(res => res.json());
 
   if (!payload) {
