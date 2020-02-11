@@ -10,14 +10,13 @@ const Mapbox = new mapbox();
 const Nominatim = new nominatim();
 const Arcgis = new arcgis();
 
-router.post("/nominatim", function(req, res, next) {
-  const { errors, isValid } = validateGeocodeInput(req.body);
+router.post("/nominatim", function (req, res, next) {
+  const { body } = req;
+  const { errors, isValid } = validateGeocodeInput(body);
 
   if (!isValid) {
     return res.status(400).json(errors);
   }
-
-  const { body } = req;
 
   const promise = body.reverse
     ? Nominatim.reverseGeocode(body.lat, body.lon, body.zoom)
@@ -47,14 +46,13 @@ router.post("/mapbox", function(req, res, next) {
     });
 });
 
-router.post("/arcgis", function(req, res, next) {
-  const { errors, isValid } = validateGeocodeInput(req.body);
+router.post("/arcgis", function (req, res, next) {
+  const { body } = req;
+  const { errors, isValid } = validateGeocodeInput(body);
 
   if (!isValid) {
     return res.status(400).json(errors);
   }
-  
-  const { body } = req;
 
   const promise = body.reverse
     ? Arcgis.reverseGeocode(body.lat, body.lon)
