@@ -38,6 +38,9 @@ app.use(passport.initialize());
 require("./config/passport")(passport);
 
 // Routes
+app.get("/", function (req, res, next) { 
+  res.send("Welcome To Mapend! (:|> ")
+})
 app.use("/api/users", users);
 
 app.use('/api/geocode', passport.authenticate('jwt', {session: false}), geocode);
