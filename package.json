@@ -3,6 +3,14 @@
   "version": "1.0.0",
   "description": "",
   "main": "server.js",
+  "engines": {
+    "node": "10.16.0"
+  },
+  "keywords": [
+    "mapemd",
+    "geocode",
+    "reverse geocode"
+  ],
   "dependencies": {
     "axios": "^0.19.2",
     "bcryptjs": "^2.4.3",
