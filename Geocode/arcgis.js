@@ -1,6 +1,6 @@
 const fetch = require("node-fetch");
 const NodeCache = require("node-cache");
-
+const util = require("../utils");
 const keys = require("../config/keys");
 
 const myCache = new NodeCache();
@@ -18,10 +18,10 @@ class Arcgis {
     return geocodeQuery(query);
   }
   reverseGeocode(lat, lng) {
-    if (!validateLngLat(lat, lng)) {
-      {
-        errors: [`Enter valid latitude and longitude.`];
-      }
+    if (!util.validateLngLat(lat, lng)) {
+      return Promise.resolve({
+        errors: [`Enter valid latitude and longitude.`]
+      });
     }
     const query = lng + "," + lat;
     return geocodeQuery(query);
@@ -49,14 +49,7 @@ const getToken = async () => {
   return;
 };
 
-const validateLngLat = (lat, lng) => {
-  if (!(isNaN(lat) || isNaN(lng))) {
-    const lat = Number(lat);
-    const lng = Number(lng);
-    if (lng > -180 && lng < 180 && lat > -90 && lat < 90) return true;
-  }
-  return;
-};
+
 
 const geocodeQuery = async (query, isReverse = false) => {
   //TODO: Handle with promise

@@ -1,4 +1,5 @@
 const fetch = require("node-fetch");
+const util = require("../utils");
 
 const BASE_URL = "https://nominatim.openstreetmap.org/";
 
@@ -15,8 +16,13 @@ class Nominatim {
     
     return geocodeQuery(params, type);
   }
-  reverseGeocode(lat, lon, zoom ) {
-
+  reverseGeocode(lat, lon, zoom) {
+    
+    if (!util.validateLngLat(lat, lon)) {
+      return Promise.resolve({
+        errors: [`Enter valid latitude and longitude.`]
+      });
+    }
     const params = new URLSearchParams({
       lat,
       lon,
