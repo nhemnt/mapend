@@ -7,14 +7,14 @@ module.exports = {
   secretOrKey: process.env.secretOrKey || config.secretOrKey,
   mapBoxKey: process.env.mapBoxKey || config.mapBoxKey,
   arcgis: {
-    clientId: process.env["arcgis.clientId"] || config.arcgis["clientId"],
-    clientSecret: process.env["arcgis.clientSecret"] || config.arcgis["clientSecret"],
-    authUrl: process.env["arcgis.authUrl"] || config.arcgis["authUrl"],
-    geocodeEndpoint: process.env["arcgis.geocodeEndpoint"] || config.arcgis["geocodeEndpoint"],
-    reverseGeocodeEndpoint: process.env["arcgis.reverseGeocodeEndpoint"] || config.arcgis["reverseGeocodeEndpoint"],
-    expiry: process.env["arcgis.expiry"] || config.arcgis["expiry"]
+    clientId: process.env["arcgis.clientId"] || config.arcgisClientId,
+    clientSecret: process.env["arcgis.clientSecret"] || config.arcgisClientSecret,
+    authUrl: process.env["arcgis.authUrl"] || config.arcgisAuthUrl,
+    geocodeEndpoint: process.env["arcgis.geocodeEndpoint"] || config.arcgisGeocodeEndpoint,
+    reverseGeocodeEndpoint: process.env["arcgis.reverseGeocodeEndpoint"] || config.arcgisReverseGeocodeEndpoint,
+    expiry: process.env["arcgis.expiry"] || config.arcgisExpiry
   },
   google: {
-    key:  process.env["google.key"] || config.google["key"]
+    key:  process.env["google.key"] || config.googleKey
   }
 };
