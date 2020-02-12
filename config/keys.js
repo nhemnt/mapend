@@ -1,4 +1,7 @@
-const config = require("../configKeys");
+let config = {} 
+if (process.env.NODE_ENV !== 'production') {
+  config = require("../configKeys");
+} 
 module.exports = {
   mongoURI: process.env.mongoURI || config.mongoURI,
   secretOrKey: process.env.secretOrKey || config.secretOrKey,
