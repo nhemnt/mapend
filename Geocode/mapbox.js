@@ -11,10 +11,10 @@ class Mapbox {
   setAccessToken(accessToken) {
     ACCESS_TOKEN = accessToken;
   }
-  geocodeQuery(dataset, query) {
+  geocodeQuery(query, dataset = "mapbox.places") {
     return geocodeQuery(dataset, query);
   }
-  reverseGeocode(dataset, lng, lat) {
+  reverseGeocode(lng, lat, dataset = "mapbox.places") {
     if (!util.validateLngLat(lat, lng)) {
      return Promise.resolve({
         errors: [`Enter valid latitude and longitude.`]
