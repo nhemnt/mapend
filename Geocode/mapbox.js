@@ -1,5 +1,6 @@
 const keys = require("../config/keys");
 const fetch = require("node-fetch");
+const util = require("../utils");
 
 const BASE_URL = "https://api.mapbox.com/geocoding/v5/";
 
@@ -14,6 +15,11 @@ class Mapbox {
     return geocodeQuery(dataset, query);
   }
   reverseGeocode(dataset, lng, lat) {
+    if (!util.validateLngLat(lat, lng)) {
+     return Promise.resolve({
+        errors: [`Enter valid latitude and longitude.`]
+      });
+    }
     const query = lng + "," + lat;
     return geocodeQuery(dataset, query);
   }

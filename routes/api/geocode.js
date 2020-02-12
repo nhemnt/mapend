@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const nominatim = require("../../Geocode/nominatim");
-const mapbox = new require("../../Geocode/mapbox");
+const mapbox = require("../../Geocode/mapbox");
 const arcgis = require("../../Geocode/arcgis");
 
 const validateGeocodeInput = require("../../validation/geocode");
@@ -31,19 +31,26 @@ router.post("/nominatim", function (req, res, next) {
     });
 });
 
-router.post("/mapbox", function(req, res, next) {
-  const { errors, isValid } = validateGeocodeInput(req.body);
+router.post("/mapbox", function (req, res, next) {
+  const { body } = req;
+  const { errors, isValid } = validateGeocodeInput(body);
 
   if (!isValid) {
     return res.status(400).json(errors);
   }
-  Mapbox.geocodeQuery("mapbox.places", req.body.address)
+
+  const promise = body.reverse
+  ? Mapbox.reverseGeocode("mapbox.places", body.lat, body.lon)
+  : Mapbox.geocodeQuery("mapbox.places", body.address);
+
+  promise
     .then(data => {
       res.json(data);
     })
     .catch(err => {
       res.json(err);
     });
+
 });
 
 router.post("/arcgis", function (req, res, next) {
