@@ -78,6 +78,10 @@ const geocodeQuery = async (query, isReverse = false) => {
     return { errors: [`No response for Address: ${query}`] };
   }
 
+  console.log("*********--ARCGIS--**********")
+  console.log(payload);
+  console.log("*********--ARCGIS--**********")
+
   return payload;
 };
 
