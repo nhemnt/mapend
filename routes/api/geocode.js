@@ -87,7 +87,7 @@ router.post("/", function (req, res, next) {
   let promises = [];
 
   const options = [
-    Arcgis,
+    // Arcgis,
     Mapbox,
     Nominatim
   ]
