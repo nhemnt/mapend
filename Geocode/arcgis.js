@@ -28,6 +28,14 @@ class Arcgis {
   }
 }
 
+const updateToken = (access_token, expires_in) => {
+  myCache.set(
+    "arcgis",
+    { access_token },
+    expires_in
+  );
+}
+
 const getToken = async () => {
   const params = new URLSearchParams();
   params.append("grant_type", "client_credentials");
@@ -35,32 +43,28 @@ const getToken = async () => {
   params.append("client_secret", CLIENT_SECRET);
   params.append("expiration", keys.arcgis.expiry);
 
-  await fetch(AUTH_URL, { method: "POST", body: params })
+  return await fetch(AUTH_URL, { method: "POST", body: params })
     .then(res => res.json())
     .then(data => {
       if (data && data.access_token) {
-        myCache.set(
-          "arcgis",
-          { access_token: data.access_token },
-          data.expires_in
-        );
+        updateToken(data.access_token, data.expires_in);
+        return Promise.resolve({ access_token: data.access_token });;
       }
     });
   return;
 };
 
-
-
 const geocodeQuery = async (query, isReverse = false) => {
   //TODO: Handle with promise
-  // const value = myCache.get("arcgis");
-  // if (!value) {
-  //   await getToken();
-  //   geocodeQuery()
-  // }
+  let value = myCache.get("arcgis");
+  if (!value) {
+    value = await getToken();
+  }
 
+  if (!value) return Promise.resolve({ errors: [`No response for Address: ${query}`] });
+  
   const params = new URLSearchParams({
-    // token:value.access_token,
+    token: value.access_token,
     f: "json",
     ...(isReverse
       ? { location: query }
@@ -75,7 +79,7 @@ const geocodeQuery = async (query, isReverse = false) => {
   const payload = await fetch(url).then(res => res.json());
 
   if (!payload) {
-    return  Promise.resolve({ errors: [`No response for Address: ${query}`] });
+    return Promise.resolve({ errors: [`No response for Address: ${query}`] });
   }
 
   // console.log("*********--ARCGIS--**********")
