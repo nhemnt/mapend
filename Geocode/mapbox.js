@@ -32,9 +32,9 @@ const geocodeQuery = async (dataset, query) => {
   if (!payload) {
     return { errors: [`No response for Address: ${query}`] };
   }
-  console.log("*********--MAPBOX--**********")
-  console.log(payload);
-  console.log("*********--MAPBOX--**********")
+  // console.log("*********--MAPBOX--**********")
+  // console.log(payload);
+  // console.log("*********--MAPBOX--**********")
   return payload;
 };
 

@@ -73,14 +73,14 @@ const geocodeQuery = async (query, isReverse = false) => {
   const url = `${isReverse ? REVERSE_URL : BASE_URL}?${params.toString()}`;
 
   const payload = await fetch(url).then(res => res.json());
-
+  console.log(payload)
   if (!payload) {
     return { errors: [`No response for Address: ${query}`] };
   }
 
-  console.log("*********--ARCGIS--**********")
-  console.log(payload);
-  console.log("*********--ARCGIS--**********")
+  // console.log("*********--ARCGIS--**********")
+  // console.log(payload);
+  // console.log("*********--ARCGIS--**********")
 
   return payload;
 };

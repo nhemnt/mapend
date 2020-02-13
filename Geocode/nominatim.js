@@ -41,9 +41,9 @@ const geocodeQuery = async (params, type) => {
   if (!payload) {
     return { errors: [`No response for Address: ${params.get("q")}`] };
   }
-  console.log("*********--NOMINATIM--**********")
-  console.log(payload);
-  console.log("*********--NOMINATIM--**********")
+  // console.log("*********--NOMINATIM--**********")
+  // console.log(payload);
+  // console.log("*********--NOMINATIM--**********")
 
   return payload;
 };
