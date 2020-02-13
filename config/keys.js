@@ -16,5 +16,9 @@ module.exports = {
   },
   google: {
     key:  process.env["google.key"] || config.googleKey
+  },
+  dataScienceToolKit: {
+    geocodeEndpoint: process.env["dataScienceToolKit.geocodeEndpoint"] || config.dataScienceToolKitGeocodeEndpoint,
+    reverseGeocodeEndpoint: process.env["dataScienceToolKit.reverseGeocodeEndpoint"] || config.dataScienceToolKitReverseGeocodeEndpoint
   }
 };

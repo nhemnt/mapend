@@ -3,12 +3,14 @@ const router = express.Router();
 const nominatim = require("../../Geocode/nominatim");
 const mapbox = require("../../Geocode/mapbox");
 const arcgis = require("../../Geocode/arcgis");
+const dataScienceToolKit = require("../../Geocode/dataScienceToolKit");
 
 const validateGeocodeInput = require("../../validation/geocode");
 
 const Mapbox = new mapbox();
 const Nominatim = new nominatim();
 const Arcgis = new arcgis();
+const DataScienceToolKit = new dataScienceToolKit();
 
 router.post("/nominatim", function (req, res, next) {
   const { body } = req;
@@ -75,6 +77,28 @@ router.post("/arcgis", function (req, res, next) {
 
 });
 
+router.post("/datasciencetoolkit", function (req, res, next) {
+  const { body } = req;
+  const { errors, isValid } = validateGeocodeInput(body);
+
+  if (!isValid) {
+    return res.status(400).json(errors);
+  }
+
+  const promise = body.reverse
+    ? DataScienceToolKit.reverseGeocode(body.lat, body.lon)
+    : DataScienceToolKit.geocodeQuery(body.address);
+
+  promise
+    .then(data => {
+      res.json(data);
+    })
+    .catch(err => {
+      res.json(err);
+    });
+
+});
+
 
 
 router.post("/", function (req, res, next) {
@@ -88,6 +112,7 @@ router.post("/", function (req, res, next) {
 
   const options = [
     Arcgis,
+    DataScienceToolKit,
     Mapbox,
     Nominatim
   ]

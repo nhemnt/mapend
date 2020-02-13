@@ -24,7 +24,7 @@ class Arcgis {
       });
     }
     const query = lng + "," + lat;
-    return geocodeQuery(query);
+    return geocodeQuery(query, true);
   }
 }
 
@@ -86,6 +86,7 @@ const geocodeQuery = async (query, isReverse = false) => {
   // console.log(payload);
   // console.log("*********--ARCGIS--**********")
 
+  //TODO: check why payload not accebile in heroku build
   return payload;
 };
 
