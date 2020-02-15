@@ -137,6 +137,7 @@ router.post("/", function (req, res, next) {
   const options = [
     Arcgis,
     DataScienceToolKit,
+    Geocod,
     Mapbox,
     Nominatim
   ]
