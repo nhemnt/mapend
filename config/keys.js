@@ -20,5 +20,9 @@ module.exports = {
   dataScienceToolKit: {
     geocodeEndpoint: process.env["dataScienceToolKit.geocodeEndpoint"] || config.dataScienceToolKitGeocodeEndpoint,
     reverseGeocodeEndpoint: process.env["dataScienceToolKit.reverseGeocodeEndpoint"] || config.dataScienceToolKitReverseGeocodeEndpoint
+  },
+  geocod: {
+    key: process.env["geocod.key"] || config.geocodApiKey,
+    geocodeEndpoint: process.env["geocod.geocodeEndpoint"] || config.geocodUrl
   }
 };
