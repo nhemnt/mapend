@@ -42,8 +42,75 @@ const geocodeQuery = async (query, isReverse = false) => {
   if (!payload) {
     return Promise.resolve({ errors: [`No response for Address: ${query}`] });
   }
+  
+  const view = payload.Response.View[0];
+    if (!view) {
+      return Promise.resolve({ errors: [`No response for Address: ${query}`] });;  
+    }
+  const results = view.Result.map(formatResult);
 
-  return payload;
+  return results;
 };
+
+const formatResult = (result) => {
+  try {
+    
+
+    let location = result.Location || {};
+    let address = location.Address || {};
+    let i;
+  
+    let extractedObj = {
+      formattedAddress: address.Label || null,
+      latitude: location.DisplayPosition.Latitude,
+      longitude: location.DisplayPosition.Longitude,
+      country: null,
+      countryCode: address.Country || null,
+      state: address.State || null,
+      county: address.County || null,
+      city: address.City || null,
+      zipcode: address.PostalCode || null,
+      district: address.District || null,
+      streetName: address.Street || null,
+      streetNumber: address.HouseNumber || null,
+      building: address.Building || null,
+      extra: {
+        herePlaceId: location.LocationId || null,
+        confidence: result.Relevance || 0
+      },
+      administrativeLevels: {}
+    };
+  
+    for (i = 0; i < address.AdditionalData.length; i++) {
+      let additionalData = address.AdditionalData[i];
+      switch (additionalData.key) {
+        //Country 2-digit code
+        case 'Country2':
+          extractedObj.countryCode = additionalData.value;
+          break;
+        //Country name
+        case 'CountryName':
+          extractedObj.country = additionalData.value;
+          break;
+        //State name
+        case 'StateName':
+          extractedObj.administrativeLevels.level1long = additionalData.value;
+          extractedObj.state = additionalData.value;
+          break;
+        //County name
+        case 'CountyName':
+          extractedObj.administrativeLevels.level2long = additionalData.value;
+          extractedObj.county = additionalData.value;
+      }
+    }
+  
+    return extractedObj;
+  } catch (err) {
+    console.log(err);
+    return Promise.resolve({ errors: [`No response for Address` , err] });
+  }
+  
+  
+}
 
 module.exports = Here;
