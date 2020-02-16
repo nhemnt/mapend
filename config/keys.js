@@ -15,7 +15,8 @@ module.exports = {
     expiry: process.env["arcgis.expiry"] || config.arcgisExpiry
   },
   google: {
-    key:  process.env["google.key"] || config.googleKey
+    key: process.env["google.key"] || config.googleKey,
+    geocodeEndpoint: process.env["google.geocodeEndpoint"] || config.googleGeocodeEndPoint,
   },
   dataScienceToolKit: {
     geocodeEndpoint: process.env["dataScienceToolKit.geocodeEndpoint"] || config.dataScienceToolKitGeocodeEndpoint,
