@@ -6,6 +6,7 @@ const arcgis = require("../../Geocode/arcgis");
 const dataScienceToolKit = require("../../Geocode/dataScienceToolKit");
 const geocod = require("../../Geocode/geocod");
 const google = require("../../Geocode/google");
+const here = require("../../Geocode/here");
 
 const validateGeocodeInput = require("../../validation/geocode");
 
@@ -15,6 +16,7 @@ const Arcgis = new arcgis();
 const DataScienceToolKit = new dataScienceToolKit();
 const Geocod = new geocod();
 const Google = new google();
+const Here = new here();
 
 router.post("/nominatim", function (req, res, next) {
   const { body } = req;
@@ -148,6 +150,28 @@ router.post("/google", function (req, res, next) {
 
 });
 
+router.post("/here", function (req, res, next) {
+  const { body } = req;
+  const { errors, isValid } = validateGeocodeInput(body);
+
+  if (!isValid) {
+    return res.status(400).json(errors);
+  }
+
+  const promise = body.reverse
+    ? Here.reverseGeocode(body.lat, body.lon)
+    : Here.geocodeQuery(body.address);
+
+  promise
+    .then(data => {
+      res.json(data);
+    })
+    .catch(err => {
+      res.json(err);
+    });
+
+});
+
 
 
 router.post("/", function (req, res, next) {
@@ -164,6 +188,7 @@ router.post("/", function (req, res, next) {
     DataScienceToolKit,
     Geocod,
     Google,
+    Here,
     Mapbox,
     Nominatim
   ]

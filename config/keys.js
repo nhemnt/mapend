@@ -1,4 +1,3 @@
-let config = {} 
 if (process.env.NODE_ENV !== 'production') {
   config = require("../configKeys");
 } 
@@ -25,5 +24,10 @@ module.exports = {
   geocod: {
     key: process.env["geocod.key"] || config.geocodApiKey,
     geocodeEndpoint: process.env["geocod.geocodeEndpoint"] || config.geocodUrl
+  },
+  here: {
+    key: process.env["here.key"] || config.hereApiKey,
+    geocodeEndpoint: process.env["here.geocodeEndpoint"] || config.hereUrl,
+    reverseGeocodeEndpoint: process.env["here.reverseGeocodeEndpoint"] || config.hereReverseGeocodUrl
   }
 };
